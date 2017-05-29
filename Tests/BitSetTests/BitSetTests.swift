@@ -2,13 +2,32 @@ import XCTest
 @testable import BitSet
 
 class BitSetTests: XCTestCase {
-    func testExample() {
-        let bs = BitSet<UInt64>(numBits: 1023)
-        print(bs)
+    
+
+    func testInitializeEmpty() {
+        let bs = BitSet<UInt8>(numBits: 0)
+        XCTAssertEqual("", bs.description)
+    }
+    
+    func testInitializeOnBoundary() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testInitializeShorterThanOneChunk() {
+        let bs = BitSet<UInt8>(numBits: 5)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testInitializeLongerThanOneChunk() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        XCTAssertEqual("00000000 00000000", bs.description)
     }
 
-
     static var allTests = [
-        ("testExample", testExample),
+        ("testInitializeEmpty", testInitializeEmpty),
+        ("testInitializeOnBoundary", testInitializeOnBoundary),
+        ("testInitializeShorterThanOneChunk", testInitializeShorterThanOneChunk),
+        ("testInitializeLongerThanOneChunk", testInitializeLongerThanOneChunk),
     ]
 }

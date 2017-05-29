@@ -2,21 +2,36 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     
     // MARK: - Properties
     
-    var buffer: UnsafeMutableBufferPointer<ChunkType>
+    /// Buffer holding all the chunks.
+    public var buffer: UnsafeMutableBufferPointer<ChunkType>
+
+    /// Number of chunks in this BitSet.
+    public let numChunks: Int
+
+    /// Number of bits in this BitSet. Always rounded up to the next 
+    /// chunk boundary.
+    public let bitNum: Int
     
-    let numChunks: Int
-    
+    /// Constant for number of bits in a chunk. Determined by the ChunkType
+    /// generic variable.
     fileprivate let numBitsInChunk = MemoryLayout<ChunkType>.stride * 8
     
     // MARK: - Methods
 
-    public init(numBits: Int) {
+    /// Initialize a BitSet with number of bits in it.
+    ///
+    /// - Parameter n: number of bits in this BitSet, always rounded up to ChunkType
+    /// length boundary.
+    public init(numBits n: Int) {
         // Round up to the next chunk boundary.
-        let numChunks = numBits / numBitsInChunk + 1
-        let memory = UnsafeMutablePointer<ChunkType>.allocate(capacity: numChunks)
-        memory.initialize(to: 0, count: numChunks)
-        buffer = UnsafeMutableBufferPointer<ChunkType>(start: memory, count: numChunks)
-        self.numChunks = numChunks
+        let mask = numBitsInChunk - 1
+        self.bitNum = (n & mask == 0) ? n : (n & ~mask) + numBitsInChunk
+        self.numChunks = self.bitNum / self.numBitsInChunk
+        
+        // Initialize memory
+        let memory = UnsafeMutablePointer<ChunkType>.allocate(capacity: self.numChunks)
+        memory.initialize(to: 0, count: self.numChunks)
+        self.buffer = UnsafeMutableBufferPointer<ChunkType>(start: memory, count: self.numChunks)
     }
     
     deinit {
@@ -25,20 +40,28 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     }
 
     
-    public func set(at: Int) -> BitSet {
-        return BitSet(numBits: 0)
+    /// Set a bit at the specified index.
+    ///
+    /// - Parameter index: index (starting from 0) of the bit to set.
+    public func set(at index: Int) {
     }
     
-    public func clear(at: Int) -> BitSet {
-        return BitSet(numBits: 0)
+    /// Clear a bit at the specified index.
+    ///
+    /// - Parameter index: index (starting from 0) of the bit to clear.
+    public func clear(at index: Int) {
     }
     
-    public func set(range: ClosedRange<Int>) -> BitSet {
-        return BitSet(numBits: 0)
+    /// Set a range of bits in the BitSet.
+    ///
+    /// - Parameter range: range to clear.
+    public func set(range: ClosedRange<Int>) {
     }
     
-    public func clear(range: ClosedRange<Int>) -> BitSet {
-        return BitSet(numBits: 0)
+    /// Clear a range of bits in the Bitset.
+    ///
+    /// - Parameter range: range to clear.
+    public func clear(range: ClosedRange<Int>) {
     }
     
 }
