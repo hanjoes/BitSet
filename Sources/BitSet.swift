@@ -15,7 +15,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     /// Constant for number of bits in a chunk. Determined by the ChunkType
     /// generic variable.
     fileprivate let numBitsInChunk = MemoryLayout<ChunkType>.stride * 8
-    
+        
     // MARK: - Methods
 
     /// Initialize a BitSet with number of bits in it.
@@ -38,7 +38,6 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         buffer.baseAddress?.deinitialize(count: self.numChunks)
         buffer.baseAddress?.deallocate(capacity: self.numChunks)
     }
-
     
     /// Set a bit at the specified index.
     ///
