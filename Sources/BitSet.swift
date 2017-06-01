@@ -16,6 +16,34 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     /// generic variable.
     fileprivate let numBitsInChunk = MemoryLayout<ChunkType>.stride * 8
     
+    /// Convenience masks for range related operations.
+    /// Contains consecutive bit masks starting from left.
+    public lazy var leftConsecutiveMasks: [ChunkType] = {
+        var result = [ChunkType]()
+        var previous: ChunkType = 0
+        for i in 0..<self.numBitsInChunk {
+            let currentMask = ChunkType(UIntMax(1 << (self.numBitsInChunk - i - 1)))
+            let currentNumber = previous | currentMask
+            result.append(currentNumber)
+            previous = currentNumber
+        }
+        return result
+    }()
+    
+    /// Convenience masks for range related operations.
+    /// Contains consecutive bit masks starting from right.
+    public lazy var rightConsecutiveMasks: [ChunkType] = {
+        var result = [ChunkType]()
+        var previous: ChunkType = 0
+        for i in 0..<self.numBitsInChunk {
+            let currentMask = ChunkType(UIntMax(1 << i))
+            let currentNumber = previous | currentMask
+            result.append(currentNumber)
+            previous = currentNumber
+        }
+        return result
+    }()
+    
     // MARK: - Methods
 
     /// Initialize a BitSet with number of bits in it.
@@ -45,9 +73,6 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     public func set(at index: Int) {
         let chunkIndex = index / self.numBitsInChunk
         let chunkOffset = index % self.numBitsInChunk
-        // The UnsignedInteger protocol requires an initializer that converts
-        // a number of UIntMax to the type conforms to it. The bitMask needs to
-        // be an instance of UIntMax for it to be converted to ChunkType.
         let bitMask = UIntMax(1 << (self.numBitsInChunk - chunkOffset - 1))
         buffer[chunkIndex] |= ChunkType(bitMask)
     }
