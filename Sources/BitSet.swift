@@ -15,7 +15,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     /// Constant for number of bits in a chunk. Determined by the ChunkType
     /// generic variable.
     fileprivate let numBitsInChunk = MemoryLayout<ChunkType>.stride * 8
-        
+    
     // MARK: - Methods
 
     /// Initialize a BitSet with number of bits in it.
@@ -43,6 +43,13 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     ///
     /// - Parameter index: index (starting from 0) of the bit to set.
     public func set(at index: Int) {
+        let chunkIndex = index / self.numBitsInChunk
+        let chunkOffset = index % self.numBitsInChunk
+        // The UnsignedInteger protocol requires an initializer that converts
+        // a number of UIntMax to the type conforms to it. The bitMask needs to
+        // be an instance of UIntMax for it to be converted to ChunkType.
+        let bitMask = UIntMax(1 << (self.numBitsInChunk - chunkOffset - 1))
+        buffer[chunkIndex] |= ChunkType(bitMask)
     }
     
     /// Clear a bit at the specified index.
