@@ -63,6 +63,18 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual("00000000 00000001", bs.description)
     }
     
+    func testSetGreaterThanMax() {
+        let bs = BitSet<UInt8>(numBits: 1)
+        bs.set(at: 10)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testSetLessThanMin() {
+        let bs = BitSet<UInt8>(numBits: 1)
+        bs.set(at: -1)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
     // MARK: - Test Consecutive Masks
     
     func testLeftConsecutiveMasks() {
