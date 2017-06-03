@@ -68,6 +68,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     }
     
     /// Set a bit at the specified index.
+    /// This operation is safe. Out of index will not change the bitset.
     ///
     /// - Parameter index: index (starting from 0) of the bit to set.
     public func set(at index: Int) {
@@ -85,8 +86,9 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     
     /// Set a range of bits in the BitSet.
     ///
-    /// - Parameter range: range to clear.
+    /// - Parameter range: range to set.
     public func set(range: ClosedRange<Int>) {
+        
     }
     
     /// Clear a range of bits in the Bitset.
