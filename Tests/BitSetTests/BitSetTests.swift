@@ -99,7 +99,7 @@ class BitSetTests: XCTestCase {
     
     func testSetRangeEnd() {
         let bs = BitSet<UInt8>(numBits: 8)
-        bs.set(range: 0...0)
+        bs.set(range: 7...7)
         XCTAssertEqual("00000001", bs.description)
     }
     
@@ -123,7 +123,7 @@ class BitSetTests: XCTestCase {
     
     func testSetRangeNextChunkEnd() {
         let bs = BitSet<UInt8>(numBits: 9)
-        bs.set(range: 8...8)
+        bs.set(range: 15...15)
         XCTAssertEqual("00000000 00000001", bs.description)
     }
     
@@ -131,6 +131,12 @@ class BitSetTests: XCTestCase {
         let bs = BitSet<UInt8>(numBits: 9)
         bs.set(range: 12...12)
         XCTAssertEqual("00000000 00001000", bs.description)
+    }
+    
+    func testSetRangeCrossMultipleChunks() {
+        let bs = BitSet<UInt8>(numBits: 28)
+        bs.set(range: 3...28)
+        XCTAssertEqual("00011111 11111111 11111111 11111000", bs.description)
     }
     
     // MARK: - Registration

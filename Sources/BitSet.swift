@@ -92,7 +92,35 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     ///
     /// - Parameter range: range to set.
     public func set(range: ClosedRange<Int>) {
+        guard range.lowerBound >= 0 && range.upperBound < bitNum else {
+            return
+        }
         
+        let minChunkIndex = range.lowerBound / self.numBitsInChunk
+        let maxChunkIndex = range.upperBound / self.numBitsInChunk
+        let minChunkOffset = range.lowerBound % self.numBitsInChunk
+        let maxChunkOffset = range.upperBound % self.numBitsInChunk
+        
+        var mask: ChunkType
+        if minChunkIndex == maxChunkIndex {
+            mask = rightConsecutiveMasks[minChunkOffset] & leftConsecutiveMasks[maxChunkOffset]
+            buffer[minChunkIndex] |= mask
+        }
+        else {
+            for chunkIndex in minChunkIndex...maxChunkIndex {
+                var mask: ChunkType
+                if chunkIndex == minChunkIndex {
+                    mask = rightConsecutiveMasks[minChunkOffset]
+                }
+                else if chunkIndex == maxChunkIndex {
+                    mask = leftConsecutiveMasks[maxChunkOffset]
+                }
+                else {
+                    mask = rightConsecutiveMasks[0]
+                }
+                buffer[chunkIndex] |= mask
+            }
+        }
     }
     
     /// Clear a range of bits in the Bitset.
