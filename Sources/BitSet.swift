@@ -41,7 +41,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
             result.append(currentNumber)
             previous = currentNumber
         }
-        return result
+        return result.reversed()
     }()
     
     // MARK: - Methods
