@@ -86,6 +86,14 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
     ///
     /// - Parameter index: index (starting from 0) of the bit to clear.
     public func clear(at index: Int) {
+        guard index >= 0 && index < bitNum else {
+            return
+        }
+        
+        let chunkIndex = index / self.numBitsInChunk
+        let chunkOffset = index % self.numBitsInChunk
+        let bitMask = UIntMax(1 << (self.numBitsInChunk - chunkOffset - 1))
+        buffer[chunkIndex] &= ~ChunkType(bitMask)
     }
     
     /// Set a range of bits in the BitSet.

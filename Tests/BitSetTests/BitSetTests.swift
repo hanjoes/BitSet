@@ -75,6 +75,69 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual("00000000", bs.description)
     }
     
+    
+    // MARK: - Test Clear
+    
+    func testClearBeginning() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(at: 0)
+        XCTAssertEqual("10000000", bs.description)
+        bs.clear(at: 0)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearEnd() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(at: 7)
+        XCTAssertEqual("00000001", bs.description)
+        bs.clear(at: 7)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearMiddle() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(at: 4)
+        XCTAssertEqual("00001000", bs.description)
+        bs.clear(at: 4)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearCrossBoundaryBeginning() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(at: 8)
+        XCTAssertEqual("00000000 10000000", bs.description)
+        bs.clear(at: 8)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearCrossBoundaryEnd() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(at: 12)
+        XCTAssertEqual("00000000 00001000", bs.description)
+        bs.clear(at: 12)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearCrossBoundaryMiddle() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(at: 15)
+        XCTAssertEqual("00000000 00000001", bs.description)
+        bs.clear(at: 15)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearGreaterThanMax() {
+        let bs = BitSet<UInt8>(numBits: 1)
+        bs.clear(at: 10)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearLessThanMin() {
+        let bs = BitSet<UInt8>(numBits: 1)
+        bs.clear(at: -1)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
     // MARK: - Test Consecutive Masks
     
     func testLeftConsecutiveMasks() {
