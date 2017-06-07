@@ -202,6 +202,73 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual("00011111 11111111 11111111 11111000", bs.description)
     }
     
+    
+    // MARK: - Test Clear Range
+    
+    func testClearRangeBeginning() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(range: 0...0)
+        XCTAssertEqual("10000000", bs.description)
+        bs.clear(range: 0...0)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearRangeEnd() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(range: 7...7)
+        XCTAssertEqual("00000001", bs.description)
+        bs.clear(range: 7...7)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearRangeMiddle() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        bs.set(range: 4...4)
+        XCTAssertEqual("00001000", bs.description)
+        bs.clear(range: 4...4)
+        XCTAssertEqual("00000000", bs.description)
+    }
+    
+    func testClearRangeStepOnBoundary() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(range: 4...8)
+        XCTAssertEqual("00001111 10000000", bs.description)
+        bs.clear(range: 4...7)
+        XCTAssertEqual("00000000 10000000", bs.description)
+    }
+    
+    func testClearRangeNextChunkBeginning() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(range: 8...8)
+        XCTAssertEqual("00000000 10000000", bs.description)
+        bs.clear(range: 8...8)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearRangeNextChunkEnd() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(range: 15...15)
+        XCTAssertEqual("00000000 00000001", bs.description)
+        bs.clear(range: 15...15)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearRangeNextChunkMiddle() {
+        let bs = BitSet<UInt8>(numBits: 9)
+        bs.set(range: 12...12)
+        XCTAssertEqual("00000000 00001000", bs.description)
+        bs.clear(range: 12...12)
+        XCTAssertEqual("00000000 00000000", bs.description)
+    }
+    
+    func testClearRangeCrossMultipleChunks() {
+        let bs = BitSet<UInt8>(numBits: 28)
+        bs.set(range: 3...28)
+        XCTAssertEqual("00011111 11111111 11111111 11111000", bs.description)
+        bs.clear(range: 3...28)
+        XCTAssertEqual("00000000 00000000 00000000 00000000", bs.description)
+    }
+    
     // MARK: - Registration
 
     static var allTests = [
