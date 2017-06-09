@@ -2,7 +2,7 @@ import XCTest
 @testable import BitSet
 
 class BitSetTests: XCTestCase {
-    
+
     // MARK: - Test Initialization
 
     func testInitializeEmpty() {
@@ -272,9 +272,43 @@ class BitSetTests: XCTestCase {
     // MARK: - Registration
 
     static var allTests = [
-        ("testInitializeEmpty", testInitializeEmpty),
-        ("testInitializeOnBoundary", testInitializeOnBoundary),
-        ("testInitializeShorterThanOneChunk", testInitializeShorterThanOneChunk),
+        ("testClearRangeCrossMultipleChunks", testClearRangeCrossMultipleChunks),
+        ("testClearRangeNextChunkMiddle", testClearRangeNextChunkMiddle),
+        ("testClearRangeNextChunkEnd", testClearRangeNextChunkEnd),
+        ("testClearRangeNextChunkBeginning", testClearRangeNextChunkBeginning),
+        ("testClearRangeStepOnBoundary", testClearRangeStepOnBoundary),
+        ("testClearRangeMiddle", testClearRangeMiddle),
+        ("testClearRangeEnd", testClearRangeEnd),
+        ("testClearRangeBeginning", testClearRangeBeginning),
+        ("testSetRangeCrossMultipleChunks", testSetRangeCrossMultipleChunks),
+        ("testSetRangeNextChunkMiddle", testSetRangeNextChunkMiddle),
+        ("testSetRangeNextChunkEnd", testSetRangeNextChunkEnd),
+        ("testSetRangeNextChunkBeginning", testSetRangeNextChunkBeginning),
+        ("testSetRangeStepOnBoundary", testSetRangeStepOnBoundary),
+        ("testSetRangeMiddle", testSetRangeMiddle),
+        ("testSetRangeEnd", testSetRangeEnd),
+        ("testSetRangeBeginning", testSetRangeBeginning),
+        ("testRightConsecutiveMasks", testRightConsecutiveMasks),
+        ("testLeftConsecutiveMasks", testLeftConsecutiveMasks),
+        ("testClearLessThanMin", testClearLessThanMin),
+        ("testClearGreaterThanMax", testClearGreaterThanMax),
+        ("testClearCrossBoundaryMiddle", testClearCrossBoundaryMiddle),
+        ("testClearCrossBoundaryEnd", testClearCrossBoundaryEnd),
+        ("testClearCrossBoundaryBeginning", testClearCrossBoundaryBeginning),
+        ("testClearMiddle", testClearMiddle),
+        ("testClearEnd", testClearEnd),
+        ("testClearBeginning", testClearBeginning),
+        ("testSetLessThanMin", testSetLessThanMin),
+        ("testSetGreaterThanMax", testSetGreaterThanMax),
+        ("testSetCrossBoundaryMiddle", testSetCrossBoundaryMiddle),
+        ("testSetCrossBoundaryEnd", testSetCrossBoundaryEnd),
+        ("testSetCrossBoundaryBeginning", testSetCrossBoundaryBeginning),
+        ("testSetMiddle", testSetMiddle),
+        ("testSetEnd", testSetEnd),
+        ("testSetBeginning", testSetBeginning),
         ("testInitializeLongerThanOneChunk", testInitializeLongerThanOneChunk),
+        ("testInitializeShorterThanOneChunk", testInitializeShorterThanOneChunk),
+        ("testInitializeOnBoundary", testInitializeOnBoundary),
+        ("testInitializeEmpty", testInitializeEmpty)
     ]
 }
