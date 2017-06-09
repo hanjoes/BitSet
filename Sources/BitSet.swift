@@ -22,7 +22,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         var result = [ChunkType]()
         var previous: ChunkType = 0
         for i in 0..<self.numBitsInChunk {
-            let currentMask = ChunkType(UIntMax(1 << (self.numBitsInChunk - i - 1)))
+            let currentMask = ChunkType(UIntMax(1) << UIntMax(self.numBitsInChunk - i - 1))
             let currentNumber = previous | currentMask
             result.append(currentNumber)
             previous = currentNumber
@@ -36,13 +36,23 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         var result = [ChunkType]()
         var previous: ChunkType = 0
         for i in 0..<self.numBitsInChunk {
-            let currentMask = ChunkType(UIntMax(1 << i))
+            let currentMask = ChunkType(UIntMax(1) << UIntMax(i))
             let currentNumber = previous | currentMask
             result.append(currentNumber)
             previous = currentNumber
         }
         return result.reversed()
     }()
+    
+    /// Number of bits set in this BitSet.
+    public var popcnt: Int {
+        // TODO: Naive implementation.
+        var result = 0
+        for chunk in buffer {
+            result += popcnt(of: chunk)
+        }
+        return result
+    }
     
     // MARK: - Methods
 
@@ -178,6 +188,17 @@ private extension BitSet {
             converted = "0\(converted)"
         }
         return converted
+    }
+    
+    func popcnt(of chunk: ChunkType) -> Int {
+        var count = 0
+        for offset in 0..<self.numBitsInChunk {
+            let mask = ChunkType(UIntMax(1) << UIntMax(offset))
+            if mask & chunk != 0 {
+                count += 1
+            }
+        }
+        return count
     }
 }
 

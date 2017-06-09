@@ -269,6 +269,22 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual("00000000 00000000 00000000 00000000", bs.description)
     }
     
+    // MARK: - Popcnt
+    
+    func testPopcntEmpty() {
+        let bs = BitSet<UInt8>(numBits: 8)
+        XCTAssertEqual(0, bs.popcnt)
+    }
+    
+    
+    func testPopcntNotEmpty64Bit() {
+        let bs = BitSet<UInt64>(numBits: 8)
+        bs.set(range: 10...20)
+        bs.set(range: 13...23)
+        bs.set(range: 25...27)
+        XCTAssertEqual(17, bs.popcnt)
+    }
+    
     // MARK: - Registration
 
     static var allTests = [
