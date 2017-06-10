@@ -176,6 +176,24 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         }
     }
     
+    /// Union with another bitset.
+    ///
+    /// - Parameter another: the other bitset to union with the current one
+    public func union(with another: BitSet<ChunkType>) {
+        for index in 0..<self.numChunks {
+            self.buffer[index] |= another.buffer[index]
+        }
+    }
+    
+    /// Intersect with another bitset.
+    ///
+    /// - Parameter another: the other bitset to intersect with the current one
+    public func intersect(with another: BitSet<ChunkType>) {
+        for index in 0..<self.numChunks {
+            self.buffer[index] &= another.buffer[index]
+        }
+    }
+    
 }
 
 // MARK: - Private

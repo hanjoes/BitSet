@@ -285,9 +285,72 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual(17, bs.popcnt)
     }
     
+    // MARK: - Union
+    
+    func testUnionTwoEmpty() {
+        let bs1 = BitSet<UInt64>(numBits: 1)
+        let bs2 = BitSet<UInt64>(numBits: 1)
+        bs1.union(with: bs2)
+        XCTAssertEqual(0, bs1.popcnt)
+    }
+    
+    func testUnionEmptyWithNonEmpty() {
+        let bs1 = BitSet<UInt64>(numBits: 1)
+        let bs2 = BitSet<UInt64>(numBits: 1)
+        bs2.set(range: 1...10)
+        bs1.union(with: bs2)
+        XCTAssertEqual(10, bs1.popcnt)
+    }
+    
+    func testUnionTwoRandomlyDistributed() {
+        let bs1 = BitSet<UInt64>(numBits: 65)
+        let bs2 = BitSet<UInt64>(numBits: 67)
+        bs1.set(range: 1...10)
+        bs1.set(range: 100...111)
+        bs2.set(range: 20...30)
+        bs2.set(range: 110...113)
+        bs1.union(with: bs2)
+        XCTAssertEqual(35, bs1.popcnt)
+    }
+    
+    // MARK: - Intersect
+    
+    func testIntersectTwoEmpty() {
+        let bs1 = BitSet<UInt64>(numBits: 1)
+        let bs2 = BitSet<UInt64>(numBits: 1)
+        bs1.intersect(with: bs2)
+        XCTAssertEqual(0, bs1.popcnt)
+    }
+    
+    func testIntersectEmptyWithNonEmpty() {
+        let bs1 = BitSet<UInt64>(numBits: 1)
+        let bs2 = BitSet<UInt64>(numBits: 1)
+        bs2.set(range: 1...10)
+        bs1.intersect(with: bs2)
+        XCTAssertEqual(0, bs1.popcnt)
+    }
+    
+    func testIntersectTwoRandomlyDistributed() {
+        let bs1 = BitSet<UInt64>(numBits: 65)
+        let bs2 = BitSet<UInt64>(numBits: 67)
+        bs1.set(range: 1...10)
+        bs1.set(range: 100...111)
+        bs2.set(range: 20...30)
+        bs2.set(range: 110...113)
+        bs1.intersect(with: bs2)
+        XCTAssertEqual(2, bs1.popcnt)
+    }
+    
     // MARK: - Registration
 
     static var allTests = [
+        ("testIntersectTwoRandomlyDistributed", testIntersectTwoRandomlyDistributed),
+        ("testIntersectEmptyWithNonEmpty", testIntersectEmptyWithNonEmpty),
+        ("testIntersectTwoEmpty", testIntersectTwoEmpty),
+        ("testUnionTwoRandomlyDistributed", testUnionTwoRandomlyDistributed),
+        ("testUnionEmptyWithNonEmpty", testUnionEmptyWithNonEmpty),
+        ("testUnionTwoEmpty", testUnionTwoEmpty),
+        ("testPopcntEmpty", testPopcntEmpty),
         ("testClearRangeCrossMultipleChunks", testClearRangeCrossMultipleChunks),
         ("testClearRangeNextChunkMiddle", testClearRangeNextChunkMiddle),
         ("testClearRangeNextChunkEnd", testClearRangeNextChunkEnd),
