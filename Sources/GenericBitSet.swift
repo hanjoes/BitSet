@@ -22,8 +22,8 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         var result = [ChunkType]()
         var previous: ChunkType = 0
         for i in 0..<self.numBitsInChunk {
-            let currentMask = ChunkType(UIntMax(1) << UIntMax(self.numBitsInChunk - i - 1))
-            let currentNumber = previous | currentMask
+            let currentMask = UIntMax(1) << UIntMax(self.numBitsInChunk - i - 1)
+            let currentNumber = previous | ChunkType(currentMask)
             result.append(currentNumber)
             previous = currentNumber
         }
@@ -36,8 +36,8 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         var result = [ChunkType]()
         var previous: ChunkType = 0
         for i in 0..<self.numBitsInChunk {
-            let currentMask = ChunkType(UIntMax(1) << UIntMax(i))
-            let currentNumber = previous | currentMask
+            let currentMask = UIntMax(1) << UIntMax(i)
+            let currentNumber = previous | ChunkType(currentMask)
             result.append(currentNumber)
             previous = currentNumber
         }
@@ -88,7 +88,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         
         let chunkIndex = index / self.numBitsInChunk
         let chunkOffset = index % self.numBitsInChunk
-        let bitMask = UIntMax(1 << (self.numBitsInChunk - chunkOffset - 1))
+        let bitMask = UIntMax(1) << UIntMax(self.numBitsInChunk - chunkOffset - 1)
         buffer[chunkIndex] |= ChunkType(bitMask)
     }
     
@@ -102,7 +102,7 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         
         let chunkIndex = index / self.numBitsInChunk
         let chunkOffset = index % self.numBitsInChunk
-        let bitMask = UIntMax(1 << (self.numBitsInChunk - chunkOffset - 1))
+        let bitMask = UIntMax(1) << UIntMax(self.numBitsInChunk - chunkOffset - 1)
         buffer[chunkIndex] &= ~ChunkType(bitMask)
     }
     
@@ -194,6 +194,17 @@ public class BitSet<ChunkType: Comparable & UnsignedInteger> {
         }
     }
     
+    
+    /// Test whether it's one at given position.
+    ///
+    /// - Parameter index: index to test (starting from 0)
+    /// - Returns: boolean indicate whether the bit is set
+    public func one(at index: Int) -> Bool {
+        let chunkIndex = index / self.numBitsInChunk
+        let chunkOffset = index % self.numBitsInChunk
+        let bitMask = UIntMax(1) << UIntMax(self.numBitsInChunk - chunkOffset - 1)
+        return buffer[chunkIndex] & ChunkType(bitMask) != 0
+    }
 }
 
 // MARK: - Private

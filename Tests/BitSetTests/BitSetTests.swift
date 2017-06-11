@@ -1,5 +1,5 @@
 import XCTest
-@testable import BitSet
+@testable import GenericBitSet
 
 class BitSetTests: XCTestCase {
 
@@ -341,9 +341,39 @@ class BitSetTests: XCTestCase {
         XCTAssertEqual(2, bs1.popcnt)
     }
     
+    // MARK: - One
+    
+    func testEmptyTestOne() {
+        let bs = BitSet<UInt64>(numBits: 1)
+        XCTAssertFalse(bs.one(at: 0))
+    }
+    
+    func testBeginningOne() {
+        let bs = BitSet<UInt64>(numBits: 1)
+        bs.set(at: 0)
+        print(bs)
+        XCTAssertTrue(bs.one(at: 0))
+    }
+    
+    func testEndOne() {
+        let bs = BitSet<UInt64>(numBits: 1)
+        bs.set(at: 63)
+        print(bs)
+        XCTAssertTrue(bs.one(at: 63))
+    }
+    
+    func testMiddleOne() {
+        let bs = BitSet<UInt64>(numBits: 1)
+        bs.set(at: 29)
+        print(bs)
+        XCTAssertTrue(bs.one(at: 29))
+    }
+
+    
     // MARK: - Registration
 
     static var allTests = [
+        ("testEmptyTestOne", testEmptyTestOne),
         ("testIntersectTwoRandomlyDistributed", testIntersectTwoRandomlyDistributed),
         ("testIntersectEmptyWithNonEmpty", testIntersectEmptyWithNonEmpty),
         ("testIntersectTwoEmpty", testIntersectTwoEmpty),
